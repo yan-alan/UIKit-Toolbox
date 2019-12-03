@@ -24,7 +24,7 @@ open class ContentFitImageView: UIImageView {
     public override init(image: UIImage?, highlightedImage: UIImage?) {
         super.init(image: image, highlightedImage: highlightedImage)
         contentMode = .scaleAspectFit
-
+        
     }
     
     convenience public init(image: UIImage?, cornerRadius: CGFloat) {
@@ -37,7 +37,4 @@ open class ContentFitImageView: UIImageView {
     required public init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
-    
-    
 }
