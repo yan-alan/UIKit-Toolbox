@@ -11,24 +11,25 @@ open class ContentFitImageView: UIImageView {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        contentMode = .scaleAspectFit
+        contentMode = .scaleAspectFill
         
     }
     
     public override init(image: UIImage?) {
         super.init(image: image)
-        contentMode = .scaleAspectFit
+        contentMode = .scaleAspectFill
         
     }
     
     public override init(image: UIImage?, highlightedImage: UIImage?) {
         super.init(image: image, highlightedImage: highlightedImage)
-        contentMode = .scaleAspectFit
+        contentMode = .scaleAspectFill
         
     }
     
     convenience public init(image: UIImage?, cornerRadius: CGFloat) {
         self.init(image:image)
+        
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
         layer.masksToBounds = true

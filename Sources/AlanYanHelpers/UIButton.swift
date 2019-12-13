@@ -22,7 +22,7 @@ extension UIButton {
         layer.cornerRadius = cornerRadius!
         setTitle(title!, for: .normal)
         if let action = action {
-        addTarget(target, action: action, for: .touchUpInside)
+            addTarget(target, action: action, for: .touchUpInside)
         }
         if let image = image {
             setImage(image, for: .normal)

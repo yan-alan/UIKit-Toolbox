@@ -98,24 +98,6 @@ extension UIView {
     }
     
     /**
-        Adds a shadow to any UIView, background color must be set after
-     */
-    open func addShadow(colour: UIColor? = .gray, opacity: Float? = 1, offSet: CGSize? = .zero, radius: CGFloat? = 5) -> Self{
-        // set the shadow of the view's layer
-        clipsToBounds = false
-        layer.masksToBounds = false
-        layer.backgroundColor = UIColor.clear.cgColor
-        layer.shadowColor = colour!.cgColor
-        layer.shadowOffset = offSet!
-        layer.shadowOpacity = opacity!
-        layer.shadowRadius = radius!
-        layer.shouldRasterize = true
-        layer.rasterizationScale = UIScreen.main.scale
-        return self
-          
-    }
-    
-    /**
         Sets background colour on any view
      */
     open func setColor(_ colour: UIColor) {
@@ -123,6 +105,10 @@ extension UIView {
         
     }
     
+    
+    /**
+        Adds corners to the layer
+     */
     open func addCorners(_ cornerRadius: CGFloat) -> Self {
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
