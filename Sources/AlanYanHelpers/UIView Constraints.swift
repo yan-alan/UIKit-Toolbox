@@ -49,7 +49,7 @@ extension UIView {
     /**
         Add any combination of constraints
      */
-    open func addConstraints(top: NSLayoutYAxisAnchor? = nil, topConstant: CGFloat? = 0, bottom: NSLayoutYAxisAnchor? = nil, bottomConstant: CGFloat? = 0, right: NSLayoutXAxisAnchor? = nil, rightConstant: CGFloat? = 0, left: NSLayoutXAxisAnchor? = nil, leftConstant: CGFloat? = 0,centerXAnchor: NSLayoutXAxisAnchor? = nil, centerYAnchor: NSLayoutYAxisAnchor? = nil, widthAnchor: NSLayoutAnchor<NSLayoutDimension>? = nil, width: CGFloat? = 0, widthConstant: CGFloat? = 0, heightAnchor: NSLayoutAnchor<NSLayoutDimension>? = nil, height: CGFloat? = nil, heightConstant: CGFloat? = 0) -> Self {
+    open func addConstraints(top: NSLayoutYAxisAnchor? = nil, topConstant: CGFloat? = 0, bottom: NSLayoutYAxisAnchor? = nil, bottomConstant: CGFloat? = 0, right: NSLayoutXAxisAnchor? = nil, rightConstant: CGFloat? = 0, left: NSLayoutXAxisAnchor? = nil, leftConstant: CGFloat? = 0,centerXAnchor: NSLayoutXAxisAnchor? = nil, centerYAnchor: NSLayoutYAxisAnchor? = nil, widthAnchor: NSLayoutAnchor<NSLayoutDimension>? = nil, width: CGFloat? = nil, widthConstant: CGFloat? = 0, heightAnchor: NSLayoutAnchor<NSLayoutDimension>? = nil, height: CGFloat? = nil, heightConstant: CGFloat? = 0) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = false
         if let top = top {
             topAnchor.constraint(equalTo: top, constant: topConstant!).isActive = true

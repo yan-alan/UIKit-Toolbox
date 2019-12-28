@@ -11,19 +11,19 @@ open class ContentFitImageView: UIImageView {
     
     public override init(frame: CGRect) {
         super.init(frame: frame)
-        contentMode = .scaleAspectFill
+        contentMode = .scaleAspectFit
         
     }
     
     public override init(image: UIImage?) {
         super.init(image: image)
-        contentMode = .scaleAspectFill
+        contentMode = .scaleAspectFit
         
     }
     
     public override init(image: UIImage?, highlightedImage: UIImage?) {
         super.init(image: image, highlightedImage: highlightedImage)
-        contentMode = .scaleAspectFill
+        contentMode = .scaleAspectFit
         
     }
     
