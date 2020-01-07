@@ -12,7 +12,7 @@ import UIKit
  class that adds a shadow as the highest level view and adds a subview of any type stored in the var innerView
  */
 @available(iOS 9.0, *)
-open class ShadowUIView<T>: UIView {
+open class ShadowUIView<T: UIView>: UIView {
     open var innerView: T!
     
     public convenience init(colour: UIColor? = .gray, opacity: Float? = 1, offSet: CGSize? = .zero, radius: CGFloat? = 5, subLayer: T) {
@@ -30,11 +30,10 @@ open class ShadowUIView<T>: UIView {
         
         self.innerView = subLayer
         
-        if let subLayer = subLayer as? UIView {
-            addSubview(subLayer)
-            
-            subLayer.addConstraints(padding: 0)
-        }
+        addSubview(subLayer)
+        
+        subLayer.addConstraints(padding: 0)
+      
         
     }
     
