@@ -27,7 +27,7 @@ open class AYShadowTableViewCell: UITableViewCell {
      */
     open var cornerRadius: CGFloat = 10 {
         didSet {
-            cellView.addCorners(cornerRadius)
+            cellView.addCorners(cornerRadius).done()
         }
     }
     /**
@@ -42,7 +42,7 @@ open class AYShadowTableViewCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
-        cellView.addCorners(cornerRadius)
+        cellView.addCorners(cornerRadius).done()
         shadowView = ShadowUIView(radius: shadowRadius, subLayer: cellView).setSuperview(self).addConstraints(padding: insetValue)
     }
     

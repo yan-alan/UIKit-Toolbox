@@ -32,10 +32,8 @@ open class ShadowUIView<T: UIView>: UIView {
         
         addSubview(subLayer)
         
-        subLayer.addConstraints(padding: 0)
+        subLayer.addConstraints(padding: 0).done()
       
         
     }
-    
-    
 }

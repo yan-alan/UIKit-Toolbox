@@ -12,7 +12,17 @@ extension UIView {
     private static var _userDefinedConstraintDict = [String: [String: NSLayoutConstraint]]()
     
     /**
-        Dictionary holding activated constraints
+        Dictionary holding activated constraints, defined as the following
+         - "top": topAnchor
+         - "right": rightAnchor
+         - "left": leftAnchor
+         - "leading": leadingAnchor
+         - "trailing": trailingAnchor
+         - "bottom": bottomAnchor
+         - "centerX": centerXAnchor
+         - "centerY": centerYAnchor
+         - "height": heightAnchor
+         - "width": widthAnchor
      */
     open var userDefinedConstraintDict: [String: NSLayoutConstraint] {
         get {
@@ -26,343 +36,521 @@ extension UIView {
     }
 
     /**
-        Nest a view in its parent with padding
-     */
+       Constrains a view to its parent with padding in all directions
+       
+       Padding is defined as inwards distance, so for right and bottom, a positive padding is inwards, which is contradicting to Apple's default layout constants
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - padding: insets the view within its parent view by padding amount
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
     open func addConstraints(padding constant: CGFloat) -> Self{
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        if let superview = self.superview {
-            var constraint = topAnchor.constraint(equalTo: superview.topAnchor, constant: constant)
-            userDefinedConstraints["top"] = constraint
-            constraint.isActive = true
-            constraint = bottomAnchor.constraint(equalTo: superview.bottomAnchor, constant: -constant)
-            userDefinedConstraints["bottom"] = constraint
-            constraint.isActive = true
-            constraint = leftAnchor.constraint(equalTo: superview.leftAnchor, constant: constant)
-            userDefinedConstraints["left"] = constraint
-            constraint.isActive = true
-            constraint = rightAnchor.constraint(equalTo: superview.rightAnchor, constant: -constant)
-            userDefinedConstraints["right"] = constraint
-            constraint.isActive = true
-            
-            userDefinedConstraintDict = userDefinedConstraints
-        } else {
-            print("View must have a superview")
-        }
-    
+        precondition(self.superview != nil, "This view must have a superview")
         
+        userDefinedConstraintDict["top"] = topAnchor.constraint(equalTo: superview!.topAnchor, constant: constant)
+        userDefinedConstraintDict["bottom"] = bottomAnchor.constraint(equalTo: superview!.bottomAnchor, constant: -constant)
+        userDefinedConstraintDict["leading"] = leadingAnchor.constraint(equalTo: superview!.leadingAnchor, constant: constant)
+        userDefinedConstraintDict["trailing"] = trailingAnchor.constraint(equalTo: superview!.trailingAnchor, constant: -constant)
+        userDefinedConstraintDict["top"]?.isActive = true
+        userDefinedConstraintDict["bottom"]?.isActive = true
+        userDefinedConstraintDict["leading"]?.isActive = true
+        userDefinedConstraintDict["trailing"]?.isActive = true
         return self
     }
-    
     /**
-        Add constraints to a view with optional top, bottom, right, left anchors and constants, nested in parent by default with constants = 0
-     */
-    open func addConstraints(top: NSLayoutYAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, right: NSLayoutXAxisAnchor? = nil, left: NSLayoutXAxisAnchor? = nil, topPadding topConstant: CGFloat? = 0, bottomPadding bottomConstant: CGFloat? = 0, rightPadding rightConstant: CGFloat? =  0, leftPadding leftConstant: CGFloat? = 0) -> Self {
+       Constrains a view to another view with padding in all directions
+     
+       Padding is defined as inwards distance, so for right and bottom, a positive padding is inwards, which is contradicting to Apple's default layout constants
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - constrainTo: the view to constrain to
+           - padding: insets the view within its parent view by padding amount
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
+    open func addConstraints(constrainTo view: UIView, padding constant: CGFloat) -> Self{
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-
-        if let superview = self.superview {
-            var constraint = topAnchor.constraint(equalTo: top != nil ? top!: superview.topAnchor, constant: topConstant!)
-            constraint.isActive = true
-            userDefinedConstraints["top"] = constraint
-            constraint = bottomAnchor.constraint(equalTo: bottom != nil ? bottom!:superview.bottomAnchor, constant: -bottomConstant!)
-            constraint.isActive = true
-            userDefinedConstraints["bottom"] = constraint
-
-            constraint = leftAnchor.constraint(equalTo: left != nil ? left!:superview.leftAnchor, constant: leftConstant!)
-            constraint.isActive = true
-            userDefinedConstraints["left"] = constraint
-
-            constraint = rightAnchor.constraint(equalTo: right != nil ? right!:superview.rightAnchor, constant: -rightConstant!)
-            constraint.isActive = true
-            userDefinedConstraints["right"] = constraint
-
-            userDefinedConstraintDict = userDefinedConstraints
-        } else {
-            print("View must have a superview")
-        }
+        precondition(self.superview != nil, "This view must have a superview")
         
+        userDefinedConstraintDict["top"] = topAnchor.constraint(equalTo: view.topAnchor, constant: constant)
+        userDefinedConstraintDict["bottom"] = bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -constant)
+        userDefinedConstraintDict["leading"] = leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: constant)
+        userDefinedConstraintDict["trailing"] = trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -constant)
+        userDefinedConstraintDict["top"]?.isActive = true
+        userDefinedConstraintDict["bottom"]?.isActive = true
+        userDefinedConstraintDict["leading"]?.isActive = true
+        userDefinedConstraintDict["trailing"]?.isActive = true
         return self
     }
-    
     /**
-        Add any combination of constraints
-     */
-    open func addConstraints(top: NSLayoutYAxisAnchor? = nil, topConstant: CGFloat? = 0, bottom: NSLayoutYAxisAnchor? = nil, bottomConstant: CGFloat? = 0, right: NSLayoutXAxisAnchor? = nil, rightConstant: CGFloat? = 0, left: NSLayoutXAxisAnchor? = nil, leftConstant: CGFloat? = 0,centerXAnchor: NSLayoutXAxisAnchor? = nil, centerYAnchor: NSLayoutYAxisAnchor? = nil, widthAnchor: NSLayoutAnchor<NSLayoutDimension>? = nil, width: CGFloat? = nil, widthConstant: CGFloat? = 0, heightAnchor: NSLayoutAnchor<NSLayoutDimension>? = nil, height: CGFloat? = nil, heightConstant: CGFloat? = 0) -> Self {
+       Add constraints to a view with optional top, bottom, right, left anchors and constants, nested in parent by default with constants = 0
+
+       Padding is defined as inwards distance, so for right and bottom, a positive padding is inwards, which is contradicting to Apple's default layout constants
+     
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - top: the anchor that the topAnchor will anchor to
+           - bottom: the anchor that the bottomAnchor will anchor to
+           - leading: the anchor that the leadingAnchor will anchor to
+           - trailing: the anchor that the trailingAnchor will anchor to
+           - topPadding: padding from the top anchor
+           - bottomPadding: padding from the bottom anchor
+           - leadingPadding: padding from the leading anchor
+           - trailingPadding: padding from the trailing anchor
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
+    open func addConstraints(top: NSLayoutYAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, trailing: NSLayoutXAxisAnchor? = nil, leading: NSLayoutXAxisAnchor? = nil, topPadding topConstant: CGFloat? = 0, bottomPadding bottomConstant: CGFloat? = 0, trailingPadding trailingConstant: CGFloat? =  0, leadingPadding leadingConstant: CGFloat? = 0) -> Self {
+        precondition(self.superview != nil, "This view must have a superview")
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        var addedConstraints: [NSLayoutConstraint] = []
-        if let top = top {
-            let c = topAnchor.constraint(equalTo: top, constant: topConstant!)
-            addedConstraints.append(c)
-            userDefinedConstraints["top"] = c
-        }
-        if let bottom = bottom {
-            let c = bottomAnchor.constraint(equalTo: bottom, constant: bottomConstant!)
-            addedConstraints.append(c)
-            userDefinedConstraints["bottom"] = c
-
-        }
-        if let right = right {
-            let c = rightAnchor.constraint(equalTo: right, constant: rightConstant!)
-            addedConstraints.append(c)
-            userDefinedConstraints["right"] = c
-        }
-        if let left = left {
-            let c = leftAnchor.constraint(equalTo: left, constant: leftConstant!)
-            addedConstraints.append(c)
-            userDefinedConstraints["left"] = c
-        }
-        if let centerXAnchor = centerXAnchor {
-            let c = self.centerXAnchor.constraint(equalTo: centerXAnchor)
-            addedConstraints.append(c)
-            userDefinedConstraints["centerX"] = c
-        }
-        if let centerYAnchor = centerYAnchor {
-            let c = self.centerYAnchor.constraint(equalTo: centerYAnchor)
-            addedConstraints.append(c)
-            userDefinedConstraints["centerY"] = c
-        }
-        if let widthAnchor = widthAnchor {
-            let c = self.widthAnchor.constraint(equalTo: widthAnchor, constant: widthConstant!)
-            addedConstraints.append(c)
-            userDefinedConstraints["width"] = c
-        } else if let width = width {
-            let c = self.widthAnchor.constraint(equalToConstant: width)
-            addedConstraints.append(c)
-            userDefinedConstraints["width"] = c
-        }
-        if let heightAnchor = heightAnchor {
-            let c = self.heightAnchor.constraint(equalTo: heightAnchor, constant: heightConstant!)
-            addedConstraints.append(c)
-            userDefinedConstraints["width"] = c
-        } else if let height = height {
-            let c = self.heightAnchor.constraint(equalToConstant: height)
-            addedConstraints.append(c)
-            userDefinedConstraints["width"] = c
-        }
+        userDefinedConstraintDict["top"] = topAnchor.constraint(equalTo: top != nil ? top!: superview!.topAnchor, constant: topConstant!)
+        userDefinedConstraintDict["bottom"] = bottomAnchor.constraint(equalTo: bottom != nil ? bottom!:superview!.bottomAnchor, constant: -bottomConstant!)
+        userDefinedConstraintDict["leading"] = leadingAnchor.constraint(equalTo: leading != nil ? leading!:superview!.leadingAnchor, constant: leadingConstant!)
+        userDefinedConstraintDict["trailing"] = trailingAnchor.constraint(equalTo: trailing != nil ? trailing!:superview!.trailingAnchor, constant: -trailingConstant!)
+        userDefinedConstraintDict["top"]?.isActive = true
+        userDefinedConstraintDict["bottom"]?.isActive = true
+        userDefinedConstraintDict["leading"]?.isActive = true
+        userDefinedConstraintDict["trailing"]?.isActive = true
         
-        for constraint in addedConstraints {
-            constraint.isActive = true
-        }
-        userDefinedConstraintDict = userDefinedConstraints
-
         return self
     }
-    
-    
     /**
-        Adds constraints to the superviews center anchor
-     */
-    open func addCenteredConstraints(width: CGFloat, height: CGFloat, offSetX: CGFloat? = 0, offSetY: CGFloat? = 0) -> Self {
+       Constrains current view to another provided view with optional top, bottom, right, left anchors and constants, nested in parent by default with constants = 0
+
+       Padding is defined as inwards distance, so for right and bottom, a positive padding is inwards, which is contradicting to Apple's default layout constants
+     
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - constrainTo: the view to constrain to
+           - topPadding: padding from the top anchor
+           - bottomPadding: padding from the bottom anchor
+           - leadingPadding: padding from the leading anchor
+           - trailingPadding: padding from the trailing anchor
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
+    open func addConstraints(constrainTo view: UIView, topPadding topConstant: CGFloat? = 0, bottomPadding bottomConstant: CGFloat? = 0, trailingPadding trailingConstant: CGFloat? =  0, leadingPadding leadingConstant: CGFloat? = 0) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        var c = centerXAnchor.constraint(equalTo: superview!.centerXAnchor, constant: offSetX!)
-        c.isActive = true
-        userDefinedConstraints["centerX"] = c
-        c = centerYAnchor.constraint(equalTo: superview!.centerYAnchor, constant: offSetY!)
-        c.isActive = true
-        userDefinedConstraints["centerY"] = c
-
-        c = heightAnchor.constraint(equalToConstant: height)
-        c.isActive = true
-        userDefinedConstraints["height"] = c
+        userDefinedConstraintDict["top"] = topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant!)
+        userDefinedConstraintDict["bottom"] = bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -bottomConstant!)
+        userDefinedConstraintDict["leading"] = leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: leadingConstant!)
+        userDefinedConstraintDict["trailing"] = trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -trailingConstant!)
+        userDefinedConstraintDict["top"]?.isActive = true
+        userDefinedConstraintDict["bottom"]?.isActive = true
+        userDefinedConstraintDict["leading"]?.isActive = true
+        userDefinedConstraintDict["trailing"]?.isActive = true
         
-        c = widthAnchor.constraint(equalToConstant: width)
-        c.isActive = true
-        userDefinedConstraints["width"] = c
-        
-        userDefinedConstraintDict = userDefinedConstraints
-
         return self
     }
     
     /**
-           Adds a top constraint to another anchor
+       Adds a top constraint to the superviews safeAreaLayoutGuide's top anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "top"
+     
+       This method is meant to be used in sequence, after the superview of the view has been set using setSuperview() or someView.addSubview(thisView)
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
+    @available(iOS 11.0, *)
+    open func addTopSafe(constant: CGFloat? = 0) -> Self {
+        precondition(self.superview != nil, "This view must have a superview")
+        self.translatesAutoresizingMaskIntoConstraints = false
+        userDefinedConstraintDict["top"] = topAnchor.constraint(equalTo: self.superview!.safeAreaLayoutGuide.topAnchor, constant: constant!)
+        userDefinedConstraintDict["top"]?.isActive = true
+        return self
+    }
+    
+    /**
+       Adds a left constraint to the superviews safeAreaLayoutGuide's left anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "left"
+     
+       This method is meant to be used in sequence, after the superview of the view has been set using setSuperview() or someView.addSubview(thisView)
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
+    @available(iOS 11.0, *)
+    open func addLeftSafe(constant: CGFloat? = 0) -> Self {
+        precondition(self.superview != nil, "This view must have a superview")
+        self.translatesAutoresizingMaskIntoConstraints = false
+        userDefinedConstraintDict["left"] = leftAnchor.constraint(equalTo: self.superview!.safeAreaLayoutGuide.leftAnchor, constant: constant!)
+        userDefinedConstraintDict["left"]?.isActive = true
+        return self
+    }
+    /**
+       Adds a right constraint to the superviews safeAreaLayoutGuide's right anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "right"
+     
+       This method is meant to be used in sequence, after the superview of the view has been set using setSuperview() or someView.addSubview(thisView)
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
+    @available(iOS 11.0, *)
+    open func addRightSafe(constant: CGFloat? = 0) -> Self {
+        precondition(self.superview != nil, "This view must have a superview")
+        self.translatesAutoresizingMaskIntoConstraints = false
+        userDefinedConstraintDict["right"] = rightAnchor.constraint(equalTo: self.superview!.safeAreaLayoutGuide.rightAnchor, constant: constant!)
+        userDefinedConstraintDict["right"]?.isActive = true
+        return self
+    }
+    /**
+       Adds a leading constraint to the superviews safeAreaLayoutGuide's left anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "leading"
+     
+       This method is meant to be used in sequence, after the superview of the view has been set using setSuperview() or someView.addSubview(thisView)
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
+    @available(iOS 11.0, *)
+    open func addLeadingSafe(constant: CGFloat? = 0) -> Self {
+        precondition(self.superview != nil, "This view must have a superview")
+        self.translatesAutoresizingMaskIntoConstraints = false
+        userDefinedConstraintDict["leading"] = leftAnchor.constraint(equalTo: self.superview!.safeAreaLayoutGuide.leadingAnchor, constant: constant!)
+        userDefinedConstraintDict["leading"]?.isActive = true
+        return self
+    }
+    /**
+       Adds a trailing constraint to the superviews safeAreaLayoutGuide's right anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "trailing"
+     
+       This method is meant to be used in sequence, after the superview of the view has been set using setSuperview() or someView.addSubview(thisView)
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
+    @available(iOS 11.0, *)
+    open func addTrailingSafe(constant: CGFloat? = 0) -> Self {
+        precondition(self.superview != nil, "This view must have a superview")
+        self.translatesAutoresizingMaskIntoConstraints = false
+        userDefinedConstraintDict["trailing"] = rightAnchor.constraint(equalTo: self.superview!.safeAreaLayoutGuide.trailingAnchor, constant: constant!)
+        userDefinedConstraintDict["trailing"]?.isActive = true
+        return self
+    }
+    /**
+       Adds a bottom constraint to the superviews safeAreaLayoutGuide's bottom anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "bottom"
+     
+       This method is meant to be used in sequence, after the superview of the view has been set using setSuperview() or someView.addSubview(thisView)
+       - Precondition:
+         - The view must have a superview
+       - Parameters:
+           - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+       - Returns:
+           - passes through the view that called this function, a subclass of UIView
+    */
+    @available(iOS 11.0, *)
+    open func addBottomSafe(constant: CGFloat? = 0) -> Self {
+        precondition(self.superview != nil, "This view must have a superview")
+        self.translatesAutoresizingMaskIntoConstraints = false
+        userDefinedConstraintDict["bottom"] = bottomAnchor.constraint(equalTo: self.superview!.safeAreaLayoutGuide.bottomAnchor, constant: constant!)
+        userDefinedConstraintDict["bottom"]?.isActive = true
+        return self
+    }
+    /**
+        Adds a top constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "top".
+      
+        - Precondition:
+            - if anchor is not provided, the view must have a superview
+        - Parameters:
+            - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's top anchor
+            - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
     */
     open func addTop(anchor: NSLayoutYAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.topAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-
-        let c = topAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.topAnchor: anchor!, constant: constant!)
-        userDefinedConstraints["top"] = c
-        c.isActive = true
-        
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["top"] = topAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.topAnchor: anchor!, constant: constant!)
+        userDefinedConstraintDict["top"]?.isActive = true
         return self
     }
     /**
-           Adds a left constraint to another anchor
+        Adds a left constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "left".
+      
+        - Precondition:
+            - if anchor is not provided, the view must have a superview
+        - Parameters:
+            - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's left anchor
+            - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
     */
     open func addLeft(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.leftAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-        
-        let c = leftAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.leftAnchor: anchor!, constant: constant!)
-        userDefinedConstraints["left"] = c
-        c.isActive = true
-        
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["left"] = leftAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.leftAnchor: anchor!, constant: constant!)
+        userDefinedConstraintDict["left"]?.isActive = true
         return self
     }
     /**
-           Adds a right constraint to another anchor
+        Adds a right constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "right".
+      
+        - Precondition:
+            - if anchor is not provided, the view must have a superview
+        - Parameters:
+            - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's right anchor
+            - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
     */
     open func addRight(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.rightAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-        
-        let c = rightAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.rightAnchor: anchor!, constant: constant!)
-        userDefinedConstraints["right"] = c
-        c.isActive = true
-        
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["right"] = rightAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.rightAnchor: anchor!, constant: constant!)
+        userDefinedConstraintDict["right"]?.isActive = true
         return self
     }
     /**
-           Adds a leading constraint to another anchor
+        Adds a leading constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "leading".
+      
+        - Precondition:
+            - if anchor is not provided, the view must have a superview
+        - Parameters:
+            - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's leading anchor
+            - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
     */
     open func addLeading(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.leadingAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-        
-        let c = leadingAnchor.constraint(equalTo: anchor!, constant: constant!)
-        userDefinedConstraints["leading"] = c
-        c.isActive = true
-
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["leading"] = leadingAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.leadingAnchor: anchor!, constant: constant!)
+        userDefinedConstraintDict["leading"]?.isActive = true
         return self
     }
 
     /**
-           Adds a trailing constraint to another anchor
+        Adds a trailing constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "trailing".
+      
+        - Precondition:
+            - if anchor is not provided, the view must have a superview
+        - Parameters:
+            - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's trailing anchor
+            - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
     */
     open func addTrailing(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.trailingAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-        
-        let c = trailingAnchor.constraint(equalTo: anchor!, constant: constant!)
-        userDefinedConstraints["trailing"] = c
-        c.isActive = true
-
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["trailing"] = trailingAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.trailingAnchor: anchor!, constant: constant!)
+        userDefinedConstraintDict["trailing"]?.isActive = true
         return self
     }
     
     /**
-           Adds a bottom constraint to another anchor
+        Adds a bottom constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "bottom".
+      
+        - Precondition:
+            - if anchor is not provided, the view must have a superview
+        - Parameters:
+            - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's bottom anchor
+            - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
     */
     open func addBottom(anchor: NSLayoutYAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.bottomAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-        
-        let c = bottomAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.bottomAnchor: anchor!, constant: constant!)
-        userDefinedConstraints["bottom"] = c
-        c.isActive = true
-        
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["bottom"] = bottomAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.bottomAnchor: anchor!, constant: constant!)
+        userDefinedConstraintDict["bottom"]?.isActive = true
         return self
     }
-    
     /**
-           Adds a height constraint to another anchor
+        Adds a centerX constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "centerX".
+      
+        - Precondition:
+            - if anchor is not provided, the view must have a superview
+        - Parameters:
+            - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's bottom anchor
+            - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
+    */
+    open func addCenterX(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.centerXAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
+        self.translatesAutoresizingMaskIntoConstraints = false
+        userDefinedConstraintDict["centerX"] = centerXAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.centerXAnchor: anchor!, constant: constant!)
+        userDefinedConstraintDict["centerX"]?.isActive = true
+        return self
+    }
+    /**
+        Adds a centerY constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "centerY".
+      
+        - Precondition:
+            - if anchor is not provided, the view must have a superview
+        - Parameters:
+            - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's bottom anchor
+            - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
+    */
+    open func addCenterY(anchor: NSLayoutYAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.centerXAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
+        self.translatesAutoresizingMaskIntoConstraints = false
+        userDefinedConstraintDict["centerY"] = centerYAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.centerYAnchor : anchor!, constant: constant!)
+        userDefinedConstraintDict["centerY"]?.isActive = true
+        return self
+    }
+   /**
+        Adds a height constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "height".
+      
+        - Precondition:
+            - if anchor is not provided, the view must have a superview
+        - Parameters:
+            - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's height anchor
+            - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
     */
     open func addHeight(anchor: NSLayoutAnchor<NSLayoutDimension>? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.heightAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-        
-        let c = heightAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.heightAnchor: anchor!, constant: constant!)
-        userDefinedConstraints["height"] = c
-        c.isActive = true
-        
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["height"] = heightAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.heightAnchor: anchor!, constant: constant!)
+        userDefinedConstraintDict["height"]?.isActive = true
         return self
     }
     
     /**
-        Adds a width constraint to another anchor
+         Adds a width constraint to another anchor, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "width".
+       
+         - Precondition:
+             - if anchor is not provided, the view must have a superview
+         - Parameters:
+             - anchor: the anchor to constrain to, if not provided it is assumed to constrain to the superview's width anchor
+             - constant: number of pixels away from the anchor, if not included it is assumed to be zero
+         - Returns:
+             - passes through the view that called this function, a subclass of UIView
      */
     open func addWidth(anchor: NSLayoutAnchor<NSLayoutDimension>? = nil, constant: CGFloat? = 0) -> Self {
+        if(anchor == nil) {
+            precondition(self.superview?.widthAnchor != nil, "This view must have a superview if no anchor is provided.")
+        }
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-        
-        let c = widthAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.widthAnchor: anchor!, constant: constant!)
-        userDefinedConstraints["width"] = c
-        c.isActive = true
-        
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["width"] = widthAnchor.constraint(equalTo: (anchor == nil) ? self.superview!.widthAnchor: anchor!, constant: constant!)
+        userDefinedConstraintDict["width"]?.isActive = true
         return self
     }
     
     /**
-       Adds a height constraint set to a constant
+        Adds a height constraint to a constant, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "height".
+      
+        - Parameters:
+            - withConstant: number of pixels representing the height of the view
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
     */
     open func addHeight(withConstant: CGFloat = 0) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-        
-        let c = heightAnchor.constraint(equalToConstant: withConstant)
-        userDefinedConstraints["height"] = c
-        c.isActive = true
-        
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["height"] = heightAnchor.constraint(equalToConstant: withConstant)
+        userDefinedConstraintDict["height"]?.isActive = true
         return self
     }
     
     /**
-        Adds a width constraint set to a constant
-     */
+        Adds a width constraint to a constant, sets it to active and adds the constraint to the userDefinedConstraints dictionary with key "width".
+      
+        - Parameters:
+            - withConstant: number of pixels representing the height of the view
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
+    */
     open func addWidth(withConstant: CGFloat = 0) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = false
-        var userDefinedConstraints: [String: NSLayoutConstraint] = [:]
-        userDefinedConstraints = userDefinedConstraintDict
-        
-        let c = widthAnchor.constraint(equalToConstant: withConstant)
-        userDefinedConstraints["width"] = c
-        c.isActive = true
-        
-        userDefinedConstraintDict = userDefinedConstraints
-
+        userDefinedConstraintDict["width"] = widthAnchor.constraint(equalToConstant: withConstant)
+        userDefinedConstraintDict["width"]?.isActive = true
         return self
     }
+    
     /**
-        Sets background colour on the view
-     */
-    open func setColor(_ colour: UIColor) {
-        backgroundColor = colour
-        
+        Sets background color to specified colour
+     
+        - Parameters:
+            - color: color to change the background colour to
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
+    */
+    open func setColor(_ color: UIColor) -> Self {
+        backgroundColor = color
+        return self
     }
     
     
     /**
-        Adds corners to the layer
-     */
+        Adds corner radius to the current view
+     
+        - Warning:
+            - If called directly on a ShadowUIView, the shadow will be lost, must call on the innerView
+        - Parameters:
+            - cornerRadius: value of corner radius
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
+    */
     open func addCorners(_ cornerRadius: CGFloat) -> Self {
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
         return self
     }
     /**
-        Sets the superview of the view to a new view
-     */
+        Adds corner radius to the current view on the specified corners
+     
+        - Parameters:
+            - cornerRadius: value of corner radius
+            - corners: corners to apply this cornerRadius to
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
+    */
+    @available(iOS 11.0, *)
+    open func addCorners(radius: CGFloat, corners: CACornerMask) -> Self {
+        layer.cornerRadius = radius
+        layer.maskedCorners = corners
+        clipsToBounds = true
+        return self
+    }
+    /**
+        Adds this view as a subview to the provided superview
+     
+        - Parameters:
+            - superview: the superview that this view will belong to
+        - Returns:
+            - passes through the view that called this function, a subclass of UIView
+    */
     open func setSuperview(_ superview: Any) -> Self {
         if let superview = superview as? UIView {
             superview.addSubview(self)
@@ -372,8 +560,11 @@ extension UIView {
     }
     
     /**
-        Call to return void, once all constraints are added/modification completed
-     */
+        Function that returns nothing, if last constraint/adjustment has been added and the result is not needed
+     
+        - Parameters: None
+        - Returns: Void
+    */
     open func done() {
     }
 }
