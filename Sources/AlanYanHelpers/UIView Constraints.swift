@@ -46,6 +46,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addConstraints(padding constant: CGFloat) -> Self{
         self.translatesAutoresizingMaskIntoConstraints = false
         precondition(self.superview != nil, "This view must have a superview")
@@ -72,6 +73,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addConstraints(constrainTo view: UIView, padding constant: CGFloat) -> Self{
         self.translatesAutoresizingMaskIntoConstraints = false
         precondition(self.superview != nil, "This view must have a superview")
@@ -105,6 +107,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addConstraints(top: NSLayoutYAxisAnchor? = nil, bottom: NSLayoutYAxisAnchor? = nil, trailing: NSLayoutXAxisAnchor? = nil, leading: NSLayoutXAxisAnchor? = nil, topPadding topConstant: CGFloat? = 0, bottomPadding bottomConstant: CGFloat? = 0, trailingPadding trailingConstant: CGFloat? =  0, leadingPadding leadingConstant: CGFloat? = 0) -> Self {
         precondition(self.superview != nil, "This view must have a superview")
         self.translatesAutoresizingMaskIntoConstraints = false
@@ -135,6 +138,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addConstraints(constrainTo view: UIView, topPadding topConstant: CGFloat? = 0, bottomPadding bottomConstant: CGFloat? = 0, trailingPadding trailingConstant: CGFloat? =  0, leadingPadding leadingConstant: CGFloat? = 0) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = false
         userDefinedConstraintDict["top"] = topAnchor.constraint(equalTo: view.topAnchor, constant: topConstant!)
@@ -160,6 +164,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     @available(iOS 11.0, *)
     open func addTopSafe(constant: CGFloat? = 0) -> Self {
         precondition(self.superview != nil, "This view must have a superview")
@@ -180,6 +185,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     @available(iOS 11.0, *)
     open func addLeftSafe(constant: CGFloat? = 0) -> Self {
         precondition(self.superview != nil, "This view must have a superview")
@@ -199,6 +205,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     @available(iOS 11.0, *)
     open func addRightSafe(constant: CGFloat? = 0) -> Self {
         precondition(self.superview != nil, "This view must have a superview")
@@ -218,6 +225,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     @available(iOS 11.0, *)
     open func addLeadingSafe(constant: CGFloat? = 0) -> Self {
         precondition(self.superview != nil, "This view must have a superview")
@@ -237,6 +245,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     @available(iOS 11.0, *)
     open func addTrailingSafe(constant: CGFloat? = 0) -> Self {
         precondition(self.superview != nil, "This view must have a superview")
@@ -256,6 +265,7 @@ extension UIView {
        - Returns:
            - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     @available(iOS 11.0, *)
     open func addBottomSafe(constant: CGFloat? = 0) -> Self {
         precondition(self.superview != nil, "This view must have a superview")
@@ -275,6 +285,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addTop(anchor: NSLayoutYAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.topAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -295,6 +306,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addLeft(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.leftAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -315,6 +327,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addRight(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.rightAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -335,6 +348,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addLeading(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.leadingAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -356,6 +370,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addTrailing(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.trailingAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -377,6 +392,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addBottom(anchor: NSLayoutYAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.bottomAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -397,6 +413,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addCenterX(anchor: NSLayoutXAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.centerXAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -417,6 +434,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addCenterY(anchor: NSLayoutYAxisAnchor? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.centerXAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -437,6 +455,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addHeight(anchor: NSLayoutAnchor<NSLayoutDimension>? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.heightAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -458,6 +477,7 @@ extension UIView {
          - Returns:
              - passes through the view that called this function, a subclass of UIView
      */
+    @discardableResult
     open func addWidth(anchor: NSLayoutAnchor<NSLayoutDimension>? = nil, constant: CGFloat? = 0) -> Self {
         if(anchor == nil) {
             precondition(self.superview?.widthAnchor != nil, "This view must have a superview if no anchor is provided.")
@@ -476,6 +496,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addHeight(withConstant: CGFloat = 0) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = false
         userDefinedConstraintDict["height"] = heightAnchor.constraint(equalToConstant: withConstant)
@@ -491,6 +512,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addWidth(withConstant: CGFloat = 0) -> Self {
         self.translatesAutoresizingMaskIntoConstraints = false
         userDefinedConstraintDict["width"] = widthAnchor.constraint(equalToConstant: withConstant)
@@ -506,6 +528,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func setColor(_ color: UIColor) -> Self {
         backgroundColor = color
         return self
@@ -522,6 +545,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func addCorners(_ cornerRadius: CGFloat) -> Self {
         layer.cornerRadius = cornerRadius
         clipsToBounds = true
@@ -536,6 +560,7 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     @available(iOS 11.0, *)
     open func addCorners(radius: CGFloat, corners: CACornerMask) -> Self {
         layer.cornerRadius = radius
@@ -551,20 +576,12 @@ extension UIView {
         - Returns:
             - passes through the view that called this function, a subclass of UIView
     */
+    @discardableResult
     open func setSuperview(_ superview: Any) -> Self {
         if let superview = superview as? UIView {
             superview.addSubview(self)
         }
 
         return self
-    }
-    
-    /**
-        Function that returns nothing, if last constraint/adjustment has been added and the result is not needed
-     
-        - Parameters: None
-        - Returns: Void
-    */
-    open func done() {
     }
 }
