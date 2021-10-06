@@ -24,7 +24,7 @@ extension UIColor {
 import SwiftUI
 
 @available(iOS 13.0, macOS 10.15, *)
-extension Color {
+public extension Color {
     init(hex: Int) {
         let blue = hex % 256
         let green = (hex >> 8) % 256
@@ -71,7 +71,7 @@ extension Color {
 #if canImport(AppKit)
 import AppKit
 
-extension NSColor {
+public extension NSColor {
     public convenience init(hex: Int, alpha: Double? = 1.0) {
         self.init(red: CGFloat((hex >> 16) & 0xFF) / 255, green: CGFloat((hex >> 8) & 0xFF) / 255, blue: CGFloat(hex & 0xFF) / 255, alpha: CGFloat(alpha!))
     }
@@ -109,7 +109,7 @@ extension NSColor {
 }
 #endif
 
-extension PlatformSpecificColour {
+public extension PlatformSpecificColour {
     
     func lighter(amount : CGFloat = 0.25) -> PlatformSpecificColour {
         return hueColorWithBrightnessAmount(amount: 1 + amount)
