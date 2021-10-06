@@ -5,6 +5,7 @@
 //  Created by Alan Yan on 2019-12-03.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 
@@ -40,3 +41,4 @@ extension UILabel {
     
 }
 
+#endif

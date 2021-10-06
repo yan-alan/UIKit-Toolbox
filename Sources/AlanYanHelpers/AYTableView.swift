@@ -5,6 +5,7 @@
 //  Created by Alan Yan on 2019-12-03.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 open class AYTableViewCell<T>: UITableViewCell {
@@ -66,3 +67,5 @@ open class AYTableView<T, C: AYTableViewCell<T>>: UITableViewController {
     
 }
 
+
+#endif

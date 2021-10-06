@@ -5,6 +5,7 @@
 //  Created by Alan Yan on 2019-12-02.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 open class ContentFitImageView: UIImageView {
@@ -39,3 +40,5 @@ open class ContentFitImageView: UIImageView {
         fatalError("init(coder:) has not been implemented")
     }
 }
+
+#endif

@@ -5,6 +5,7 @@
 //  Created by Alan Yan on 2019-12-04.
 //
 
+#if canImport(UIKit)
 import UIKit
 
 extension UIColor {
@@ -16,3 +17,5 @@ extension UIColor {
         self.init(red: CGFloat((hex >> 16) & 0xFF) / 255, green: CGFloat((hex >> 8) & 0xFF) / 255, blue: CGFloat(hex & 0xFF) / 255, alpha: CGFloat(alpha!))
     }
 }
+
+#endif
